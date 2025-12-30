@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Reyes | Edición Jefe</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root { 
+            --primary: #1e1e24; 
+            --accent: #d4af37; /* Dorado */
+            --bg-gradient: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); 
+            --card-bg: #ffffff; 
+            --danger: #e74c3c; 
+            --text-main: #2c3e50; 
+        }
+        
+        * { box-sizing: border-box; transition: all 0.3s; text-decoration: none; }
+        body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg-gradient); color: var(--text-main); margin: 0; padding-bottom: 80px; min-height: 100vh; }
+        
+        /* HEADER CON CUENTA ATRÁS */
+        .hero { background: var(--primary); color: white; padding: 2rem 1rem; text-align: center; border-bottom: 4px solid var(--accent); }
+        .hero h1 { font-size: 2.5rem; margin: 0; color: var(--accent); text-transform: uppercase; letter-spacing: 2px; }
+        
+        /* ESTILO DEL RELOJ MEJORADO */
+        .countdown-box {
+            margin-top: 15px;
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--accent);
+            padding: 10px 20px;
+            border-radius: 50px;
+            color: #fff;
+            font-weight: bold;
+            font-size: 1.1rem;
+            box-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
+        }
+
+        /* BARRA TALLAS */
+        .info-bar { position: sticky; top: 0; z-index: 100; background: rgba(255,255,255,0.95); padding: 12px; display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; box-shadow: 0 4px 15px rgba(0,0,0,0.05); border-bottom: 1px solid #eee; }
+        .size-tag { font-size: 0.8rem; padding: 6px 12px; border-radius: 20px; background: #f8f9fa; border: 1px solid #e9ecef; font-weight: 700; color: #495057; display: flex; align-items: center; gap: 5px; }
+        .size-tag i { color: var(--accent); }
+
+        /* MENSAJE DEL JEFE */
+        .master-message { max-width: 900px; margin: 30px auto 10px auto; background: white; padding: 25px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); border-top: 5px solid var(--primary); }
+        .master-message h2 { margin-top: 0; color: var(--primary); font-size: 1.5rem; text-transform: uppercase; }
+        .master-message p { line-height: 1.6; color: #555; margin-bottom: 15px; }
+        .highlight-box { background: #f8f9fa; padding: 15px; border-radius: 8px; border-left: 4px solid var(--accent); margin-top: 15px; font-size: 0.95rem; }
+
+        /* ALERTA */
+        .urgent-alert { max-width: 900px; margin: 20px auto; background: #fff5f5; padding: 20px; border-radius: 12px; border-left: 6px solid var(--danger); display: flex; align-items: center; gap: 20px; box-shadow: 0 5px 15px rgba(231, 76, 60, 0.15); }
+        .alert-icon { font-size: 2rem; color: var(--danger); }
+        
+        /* GRID */
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px; }
+        
+        /* TARJETA */
+        .card { background: var(--card-bg); border-radius: 16px; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 10px 25px rgba(0,0,0,0.05); border: 1px solid rgba(0,0,0,0.05); height: 100%; position: relative; }
+        .card:hover { transform: translateY(-8px); box-shadow: 0 20px 40px rgba(0,0,0,0.12); }
+        
+        .badge { position: absolute; top: 15px; right: 15px; background: var(--primary); color: white; padding: 5px 12px; border-radius: 6px; font-size: 0.7rem; font-weight: bold; z-index: 10; letter-spacing: 0.5px; }
+        .bg-red { background: #e74c3c; } .bg-orange { background: #f39c12; color: #000; } .bg-blue { background: #3498db; }
+
+        .img-wrapper { height: 240px; padding: 20px; background: #fff; display: flex; align-items: center; justify-content: center; border-bottom: 1px solid #f1f1f1; }
+        .img-wrapper img { max-width: 100%; max-height: 100%; object-fit: contain; filter: drop-shadow(0 5px 10px rgba(0,0,0,0.1)); }
+        
+        .card-content { padding: 20px; flex-grow: 1; display: flex; flex-direction: column; text-align: center; }
+        .card h3 { margin: 0 0 8px 0; font-size: 1.1rem; color: #2c3e50; }
+        .card p { margin: 0 0 20px 0; color: #7f8c8d; font-size: 0.9rem; line-height: 1.5; }
+        
+        /* BOTÓN DE COMPRA */
+        .buy-btn { 
+            margin-top: auto; 
+            display: inline-block; 
+            background: var(--primary); 
+            color: var(--accent); 
+            text-decoration: none; 
+            padding: 8px 20px; 
+            border-radius: 50px; 
+            font-size: 0.85rem; 
+            font-weight: bold; 
+            letter-spacing: 0.5px;
+            transition: all 0.2s ease;
+            align-self: center;
+            border: 2px solid var(--primary);
+        }
+        .buy-btn:hover { background: transparent; color: var(--primary); }
+        .buy-btn i { margin-left: 5px; }
+
+        /* Footer */
+        footer { text-align: center; margin-top: 50px; color: #7f8c8d; font-size: 0.9rem; padding: 20px; }
+    </style>
+</head>
+<body>
+
+    <header class="hero">
+        <h1>👑 Lista de Reyes</h1>
+        <div class="countdown-box" id="timer">
+            ⏳ Cargando cuenta atrás...
+        </div>
+    </header>
+
+    <div class="info-bar">
+        <div class="size-tag"><i class="fas fa-shoe-prints"></i> Nike: 44.5</div>
+        <div class="size-tag"><i class="fas fa-shoe-prints"></i> Adidas: 44</div>
+        <div class="size-tag"><i class="fas fa-tshirt"></i> Pantalón: L</div>
+        <div class="size-tag"><i class="fas fa-user-tie"></i> Chaqueta: M</div>
+    </div>
+
+    <div class="container">
+        
+        <div class="master-message">
+            <h2><i class="fas fa-bullhorn"></i> Comunicado Oficial</h2>
+            <p style="font-size: 1.1rem;">Así es, estáis hablando con el <strong>absoluto maestro, el número uno, el jefe</strong>, que ha creado esta página web exclusiva para todos vosotros.</p>
+            
+            <div class="highlight-box">
+                <strong>🕵️‍♂️ Para mi Amigo Invisible:</strong><br>
+                Quiero que sepas que la combinación de regalos debe rondar los <strong>50€</strong>. En caso de que cueste algo más, <strong>me comprometo a devolver el sobrante</strong> (entiendo que haya cosas que sobrepasen los 50€, pero me he intentado ajustar al presupuesto, ¡lo juro!).
+            </div>
+
+            <div class="highlight-box" style="border-left-color: var(--primary);">
+                <strong>❤️ Para el resto de mis admiradores y proveedores:</strong><br>
+                Os doy total libertad. Esto es solo una recomendación personal, pero cualquier regalo me hará realmente ilusión siempre que hayáis pensado en mí y me hayáis dedicado cariño y tiempo. <strong>Mi mayor regalo es vuestra compañía.</strong>
+            </div>
+        </div>
+
+        <div class="urgent-alert">
+            <div class="alert-icon"><i class="fas fa-exclamation-triangle"></i></div>
+            <div>
+                <h3 style="margin:0 0 5px 0; color: #c0392b;">¡ADVERTENCIA ECONÓMICA!</h3>
+                <p style="margin:0;">Por favor, comprad las colonias <strong>ONLINE (enlaces de Druni)</strong>. En tienda física cuestan literalmente el doble y no quiero que gastéis de más.</p>
+            </div>
+        </div>
+
+        <div class="grid">
+
+            <div class="card">
+                <span class="badge bg-orange">Tennis-Point</span>
+                <div class="img-wrapper">
+                    <img src="https://i.ibb.co/9mshNsLh/pantalonnegro.png" alt="Pantalón Negro">
+                </div>
+                <div class="card-content">
+                    <h3>Shorts Nike Court (Negro)</h3>
+                    <p>Talla L. Básico para partidos.</p>
+                    <a href="https://www.tennis-point.es/nike-court-dri-fit-advantage-6in-shorts-hombres-negroblanco-00447558684000.html" target="_blank" class="buy-btn">
+                        Ver en Tienda <i class="fas fa-external-link-alt"></i>
+                    </a>
+                </div>
+            </div>
+
+            <div class="card">
+                <span class="badge bg-orange">Tennis-Point</span>
+                <div class="img-wrapper">
+                    <img src="https://i.ibb.co/Lds8Hfbw/pantalonnikeblanco.png" alt="Pantalón Blanco">
+                </div>
+                <div class="card-content">
+                    <h3>Shorts Nike Court (Blanco)</h3>
+                    <p>Talla L. Modelo Advantage 6in.</p>
+                    <a href="https://www.tennis-point.es/nike-court-dri-fit-advantage-6in-shorts-hombres-negroblanco-00447558684000.html" target="_blank" class="buy-btn">
+                        Ver en Tienda <i class="fas fa-external-link-alt"></i>
+                    </a>
+                </div>
+            </div>
+
+            <div class="card">
+                <span class="badge bg-orange">Tennis-Point</span>
+                <div class="img-wrapper">
+                    <img src="https://i.ibb.co/GfXcVp0X/chaqueta.png" alt="Chaqueta">
+                </div>
+                <div class="card-content">
+                    <h3>Chaqueta Nike Heritage</h3>
+                    <p>Talla M. Color Negro.</p>
+                    <a href="https://www.tennis-point.es/nike-court-heritage-chaqueta-de-entrenamiento-hombres-negronegro-00447558697000.html" target="_blank" class="buy-btn">
+                        Ver en Tienda <i class="fas fa-external-link-alt"></i>
+                    </a>
+                </div>
+            </div>
+
+            <div class="card">
+                <span class="badge bg-red">-55% WEB</span>
+                <div class="img-wrapper">
+                    <img src="https://i.ibb.co/gFwDv5Wn/hugoboss.jpg" alt="Boss Bottled">
+                </div>
+                <div class="card-content">
+                    <h3>Boss Bottled Absolu</h3>
+                    <p>Intense. ¡Comprar solo online!</p>
+                    <a href="https://www.druni.es/boss-bottled-absolu-eau-parfum-intense-hombre?utm_source=google&utm_medium=cpc&utm_campaign=ES_SHOP_Shopping%20%E2%96%BA%20Brand&utm_id=15236718925&gad_source=1&gad_campaignid=15236718925&gbraid=0AAAAADjpqkZr8T1lOnAuD4F_r3gLL8j15&gclid=CjwKCAiAjc7KBhBvEiwAE2BDOXTivrTwpv3N87CPlJDDDsrBMgUiLYBfZY6bgeuDjg9WWSxfHT5vyBoCxSkQAvD_BwE" target="_blank" class="buy-btn">
+                        Oferta Druni <i class="fas fa-shopping-cart"></i>
+                    </a>
+                </div>
+            </div>
+
+            <div class="card">
+                <span class="badge bg-red">-52% WEB</span>
+                <div class="img-wrapper">
+                    <img src="https://i.ibb.co/gF6Ddgg6/burberry.jpg" alt="Burberry">
+                </div>
+                <div class="card-content">
+                    <h3>Burberry Hero</h3>
+                    <p>Eau de Parfum. Precio web.</p>
+                    <a href="https://www.druni.es/hero-eau-parfum-burberry-hombre?utm_source=google&utm_medium=cpc&utm_campaign=ES_SHOP_Shopping%20%E2%96%BA%20Brand&utm_id=15236718925&gad_source=1&gad_campaignid=15236718925&gbraid=0AAAAADjpqkZr8T1lOnAuD4F_r3gLL8j15&gclid=CjwKCAiAjc7KBhBvEiwAE2BDOXYWYQe6ymI4c6wVOBw-l1iX7oJ89FoeBDJPyPXvqSmNgFDlWWuRnRoCwBYQAvD_BwE" target="_blank" class="buy-btn">
+                        Oferta Druni <i class="fas fa-shopping-cart"></i>
+                    </a>
+                </div>
+            </div>
+
+            <div class="card">
+                <span class="badge bg-red">-66% WEB</span>
+                <div class="img-wrapper">
+                    <img src="https://i.ibb.co/WWjMqBtM/montblanc.jpg" alt="Montblanc">
+                </div>
+                <div class="card-content">
+                    <h3>Montblanc Starwalker</h3>
+                    <p>¡El chollo de la lista!</p>
+                    <a href="https://www.druni.es/starwalker-montblanc-eau-toilette-hombre?utm_source=google&utm_medium=cpc&utm_campaign=ES_SHOP_Shopping%20%E2%96%BA%20Brand&utm_id=15236718925&gad_source=1&gad_campaignid=15236718925&gbraid=0AAAAADjpqkZr8T1lOnAuD4F_r3gLL8j15&gclid=CjwKCAiAjc7KBhBvEiwAE2BDOSt0vgN0xImqTtNOmBff1yYSKYuo5S_uaRFXnJrsWjZqbEEUtQDcsBoCrvYQAvD_BwE" target="_blank" class="buy-btn">
+                        Oferta Druni <i class="fas fa-shopping-cart"></i>
+                    </a>
+                </div>
+            </div>
+
+            <div class="card">
+                <span class="badge" style="background:#000;">Adidas</span>
+                <div class="img-wrapper">
+                    <img src="https://i.ibb.co/3YC4F6JP/zapasadidas.png" alt="Adidas">
+                </div>
+                <div class="card-content">
+                    <h3>Adidas Ubersonic 5 Clay</h3>
+                    <p>Talla 44. Color Rojo/Blanco.</p>
+                    <a href="https://www.adidas.es/tenis-hombre" target="_blank" class="buy-btn">
+                        Buscar en Adidas <i class="fas fa-search"></i>
+                    </a>
+                </div>
+            </div>
+
+            <div class="card">
+                <span class="badge bg-orange">Tennis-Point</span>
+                <div class="img-wrapper">
+                    <img src="https://i.ibb.co/8nTDn0Wz/zapasnike.png" alt="Nike">
+                </div>
+                <div class="card-content">
+                    <h3>Nike Court Lite 4</h3>
+                    <p>Talla 44.5. Color Blanco.</p>
+                    <a href="https://www.tennis-point.es/zapatillas-de-tenis/nike/" target="_blank" class="buy-btn">
+                        Buscar en Web <i class="fas fa-search"></i>
+                    </a>
+                </div>
+            </div>
+
+            <div class="card">
+                <span class="badge bg-blue">Decathlon</span>
+                <div class="img-wrapper">
+                    <img src="https://i.ibb.co/nMYycgTF/presurizador.png" alt="Presurizador">
+                </div>
+                <div class="card-content">
+                    <h3>Presurizador Tuboplus</h3>
+                    <p>Mantiene la presión de las bolas.</p>
+                    <a href="https://www.decathlon.es/es/p/presurizador-de-pelotas-de-padel-3-pelotas-tubox4-crystal/_/R-p-X8946085?mc=8946085" target="_blank" class="buy-btn">
+                        Ver en Decathlon <i class="fas fa-external-link-alt"></i>
+                    </a>
+                </div>
+            </div>
+
+            <div class="card">
+                <span class="badge bg-blue">Decathlon</span>
+                <div class="img-wrapper">
+                    <img src="https://i.ibb.co/k2k2QqMr/grip.png" alt="Grips">
+                </div>
+                <div class="card-content">
+                    <h3>Wilson Pro Overgrips</h3>
+                    <p>Pack x12. Color Blanco.</p>
+                    <a href="https://www.decathlon.es/es/p/overgrips-de-tenis-wilson-pro-x12/_/R-p-X8585842?mc=8585842&LGWCODE=2&gclsrc=aw.ds&&utm_source=google&utm_medium=cpc&utm_campaign=es_ct-pmax_t-perf_ts-gen_f-cv_o-roas_xx-decathlon-d-otm-pi-ga-per-pts_&utm_id=22471060736_&gad_source=1&gad_campaignid=22471072214&gbraid=0AAAAADkAje-xGrRAheKlawVRuiNsIm4qc&gclid=CjwKCAiAjc7KBhBvEiwAE2BDOf_UA6jrnHfKVlbBLhFk5Q636f1HqiWdgm0CKpzBdeDizgeY0U6bWhoCf4wQAvD_BwE" target="_blank" class="buy-btn">
+                        Ver en Decathlon <i class="fas fa-external-link-alt"></i>
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    
+    <footer>
+        <p>Hecho con ❤️ por el Nº1</p>
+    </footer>
+
+    <script>
+        function iniciarReloj() {
+            // FECHA OBJETIVO FIJA: 6 de Enero de 2026 a las 00:00:00
+            // Usamos formato estándar en inglés para evitar errores en móviles
+            const fechaReyes = new Date("January 6, 2026 00:00:00").getTime();
+
+            // Intervalo que se ejecuta cada segundo
+            const x = setInterval(function() {
+                const ahora = new Date().getTime();
+                const distancia = fechaReyes - ahora;
+
+                // Cálculos de días, horas, minutos y segundos
+                const dias = Math.floor(distancia / (1000 * 60 * 60 * 24));
+                const horas = Math.floor((distancia % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutos = Math.floor((distancia % (1000 * 60 * 60)) / (1000 * 60));
+                const segundos = Math.floor((distancia % (1000 * 60)) / 1000);
+
+                // Mostrar el resultado en el elemento con id="timer"
+                const elementoTimer = document.getElementById("timer");
+                
+                if (elementoTimer) {
+                    if (distancia < 0) {
+                        clearInterval(x);
+                        elementoTimer.innerHTML = "🎉 ¡YA VIENEN LOS REYES! 🎉";
+                    } else {
+                        elementoTimer.innerHTML = 
+                            "⏳ Faltan: " + dias + "d " + horas + "h " + minutos + "m " + segundos + "s";
+                    }
+                }
+            }, 1000);
+        }
+
+        // Ejecutar cuando cargue la página
+        window.onload = iniciarReloj;
+    </script>
+
+</body>
+</html>
